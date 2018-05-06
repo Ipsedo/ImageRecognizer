@@ -16,7 +16,7 @@ def normalize(data):
 
 def toFloatTensor(array, use_cuda):
     if use_cuda:
-        return th.cuda.toFloatTensor(array)
+        return th.cuda.FloatTensor(array)
     else:
         return th.FloatTensor(array)
 
@@ -38,6 +38,6 @@ def makeMiniBatch(numpyArrayImg, numpyArrayLabels, batch_size, use_cuda):
         tmpLabels = numpyArrayLabels[cpt:cpt+size]
         tmpLabels = toLongTensor(tmpLabels, use_cuda)
         resImg.append(tmpImgs)
-        resLabels.append(tmpLabels)
+        resLabels.append(tmpLabels.view(-1))
         cpt += size
     return (resImg, resLabels)
