@@ -2,11 +2,17 @@ import pickle
 import numpy as np
 import torch as th
 
+def dictclass():
+    return {0:"airplane", 1:"automobile", 2:"bird", 3:"cat", 4:"deer", 5:"dog", 6:"frog", 7:"horse", 8:"ship", 9:"truck"}
+
 def toProperArray(data):
     all_red = data[:,:1024]
     all_green = data[:,1024:2048]
     all_blue = data[:,2048:]
     return np.stack([all_red, all_green, all_blue], axis=1).reshape((-1, 3, 32, 32))
+
+def normalize(data):
+    return np.divide(data, 255)
 
 def toFloatTensor(array, use_cuda):
     if use_cuda:
