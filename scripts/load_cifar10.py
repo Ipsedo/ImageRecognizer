@@ -2,6 +2,20 @@ import pickle
 import numpy as np
 import torch as th
 
+def load_data_labels(nbbatch):
+    all_data = []
+    all_labels = []
+    for i in range(nbbatch):
+        data = open("./res/cifar-10-batches-py/data_batch_%s" % (i + 1), 'rb')
+        dict = pickle.load(data, encoding='bytes')
+        data = dict[b'data']
+        labels = np.asarray(dict[b'labels']).reshape((-1,1))
+        all_data.append(data)
+        all_labels.append(labels)
+    all_data = np.concatenate(all_data, axis=0)
+    all_labels = np.concatenate(all_labels, axis=0)
+    return (all_data, all_labels)
+
 def dictclass():
     return {0:"airplane", 1:"automobile", 2:"bird", 3:"cat", 4:"deer", 5:"dog", 6:"frog", 7:"horse", 8:"ship", 9:"truck"}
 
