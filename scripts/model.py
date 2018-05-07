@@ -6,18 +6,20 @@ class ConvModel(nn.Module):
 
     def __init__(self, imgSize, nbClass):
         super(ConvModel, self).__init__()
-        self.conv1 = nn.Conv2d(3, 20, (5,5))
+        self.conv1 = nn.Conv2d(3, 18, (5,5))
         # conv1 : img 3 * 32 * 32 -> img 20 * 28 * 28
         self.maxpool1 = nn.MaxPool2d((2,2), stride=(2,2))
         # maxpool1 : img 20 * 28 * 28 -> img 20 * 14 * 14
-        self.conv2 = nn.Conv2d(20, 50, (5,5))
+        self.conv2 = nn.Conv2d(18, 54, (5,5))
         # conv2 : img 20 * 14 * 14 -> img 50 * 10 * 10
         self.maxpool2 = nn.MaxPool2d((2,2), stride=(2,2))
         # maxpool2 : img 50 * 10 * 10 -> 50 * 5 * 5
 
 
-        self.hidden_dim = int((((imgSize - 4) / 2 - 4) / 2) ** 2 * 50)
-        self.linear = nn.Linear(self.hidden_dim, nbClass)
+        self.linear1_dim = int((((imgSize - 4) / 2 - 4) / 2) ** 2 * 54)
+        self.linear2_dim = 500
+        self.linear1 = nn.Linear(self.linear1_dim, self.linear2_dim)
+        self.linear2 = nn.Linear(self.linear2_dim, nbClass)
         self.log_softmax = nn.LogSoftmax(dim=1)
 
     def forward(self, input):
@@ -29,7 +31,9 @@ class ConvModel(nn.Module):
         out = F.relu(out)
         out = self.maxpool2(out)
 
-        out = out.view(-1, self.hidden_dim)
-        out = self.linear(out)
+        out = out.view(-1, self.linear1_dim)
+        out = self.linear1(out)
+        # out = F.relu(out)
+        out = self.linear2(out)
         out = self.log_softmax(out)
         return out
