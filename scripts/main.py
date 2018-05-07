@@ -10,7 +10,7 @@ import torch.autograd as ag
 import load_cifar10
 import model
 
-use_cuda = False#th.cuda.is_available()
+use_cuda = th.cuda.is_available()
 
 # Load train data
 # data = open("./res/cifar-10-batches-py/data_batch_1", 'rb')
@@ -31,7 +31,7 @@ use_cuda = False#th.cuda.is_available()
 print("Load data...")
 (data, labels) = load_cifar10.load_data_labels(5)
 
-batch_size = 50
+batch_size = 150
 
 data = load_cifar10.normalize(data)
 data = load_cifar10.toProperArray(data)
