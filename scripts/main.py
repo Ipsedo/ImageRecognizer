@@ -13,24 +13,29 @@ import model
 use_cuda = False#th.cuda.is_available()
 
 # Load train data
-data = open("./res/cifar-10-batches-py/data_batch_1", 'rb')
-dict = pickle.load(data, encoding='bytes')
+# data = open("./res/cifar-10-batches-py/data_batch_1", 'rb')
+# dict = pickle.load(data, encoding='bytes')
+#
+# classes = load_cifar10.dictclass()
+#
+# filenames = dict[b'filenames']
+# data = dict[b'data']
+# labels = np.asarray(dict[b'labels']).reshape((-1,1))
+# batch_label = dict[b'batch_label']
+#
+# print(type(filenames))
+# print(data.shape)
+# print(labels.shape)
+# print(type(batch_label))
 
-classes = load_cifar10.dictclass()
+print("Load data...")
+(data, labels) = load_cifar10.load_data_labels(5)
 
-filenames = dict[b'filenames']
-data = dict[b'data']
-labels = np.asarray(dict[b'labels']).reshape((-1,1))
-batch_label = dict[b'batch_label']
-
-print(type(filenames))
-print(data.shape)
-print(labels.shape)
-print(type(batch_label))
+batch_size = 50
 
 data = load_cifar10.normalize(data)
 data = load_cifar10.toProperArray(data)
-(data, labels) = load_cifar10.makeMiniBatch(data, labels, 150, use_cuda)
+(data, labels) = load_cifar10.makeMiniBatch(data, labels, batch_size, use_cuda)
 
 # print(data[0].size())
 # print(labels[0].size())
@@ -65,7 +70,7 @@ def eval_model(model, data, labels):
         total += 1
     print("Test on %s img, (err / total) : %s / %s" % (len(data), err, total))
 
-
+print("Build model...")
 EPOCH = 30
 learning_rate = 2e-3
 model = model.ConvModel(32, 10)
@@ -76,6 +81,7 @@ if use_cuda:
     model.cuda()
     loss_fn.cuda()
 
+print("Train model...")
 for i in range(EPOCH):
     model.train()
     total_loss = 0
