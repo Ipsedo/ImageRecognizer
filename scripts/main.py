@@ -66,7 +66,7 @@ def eval_model(model, data, labels):
         x = ag.Variable(x)
         out = model(x)
         _, out = th.max(out, 1)
-        err += 1 if out.data[0] != y else 0
+        err += 1 if out.item() != y else 0
         total += 1
     print("Test on %s img, (err / total) : %s / %s" % (len(data), err, total))
 
@@ -91,7 +91,7 @@ for i in range(EPOCH):
         y = ag.Variable(y)
         out = model(x)
         loss = loss_fn(out, y)
-        total_loss += loss.data[0]
+        total_loss += loss.item()
         loss.backward()
         optimizer.step()
     print("Epoch %s : loss %s" % (i, total_loss))
