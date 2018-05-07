@@ -16,8 +16,6 @@ class ConvModel(nn.Module):
         # maxpool2 : img 50 * 10 * 10 -> 50 * 5 * 5
 
         self.linear1_dim = int((((imgSize - 4) / 2 - 4) / 2) ** 2 * 50)
-        self.linear2_dim = 120
-        self.linear3_dim = 84
         self.linear1 = nn.Linear(self.linear1_dim, nbClass)
         self.log_softmax = nn.LogSoftmax(dim=1)
 
